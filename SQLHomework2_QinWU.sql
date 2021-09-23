@@ -92,17 +92,16 @@ WHERE YEAR(GETDATE()) - YEAR(o.OrderDate) <= 25
 )
 
 --15.List top 5 locations (Zip Code) where the products sold most.
-SELECT TOP 5 c.PostalCode, SUM(od.Quantity) AS Total
-FROM Customers c INNER JOIN Orders o ON c.CustomerID = o.CustomerID INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
-WHERE c.PostalCode IS NOT NULL
-GROUP BY c.PostalCode
+SELECT TOP 5 o.ShipPostalCode, SUM(od.Quantity) AS Total
+FROM Orders o INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
+GROUP BY o.ShipPostalCode
 ORDER BY Total DESC
 
 --16.List top 5 locations (Zip Code) where the products sold most in last 25 years.
-SELECT TOP 5 c.PostalCode, SUM(od.Quantity) AS Total
-FROM Customers c INNER JOIN Orders o ON c.CustomerID = o.CustomerID INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
-WHERE c.PostalCode IS NOT NULL AND YEAR(GETDATE()) - YEAR(o.OrderDate) <= 25
-GROUP BY c.PostalCode
+SELECT TOP 5 o.ShipPostalCode, SUM(od.Quantity) AS Total
+FROM Orders o INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
+WHERE YEAR(GETDATE()) - YEAR(o.OrderDate) <= 25
+GROUP BY o.ShipPostalCode
 ORDER BY Total DESC
 
 --17.List all city names and number of customers in that city.
@@ -151,9 +150,9 @@ GROUP BY o.OrderDate, p.ProductName
 ORDER BY o.OrderDate
 
 --25.Display pairs of employees who have the same job title.
-SELECT ContactTitle, ContactName
-FROM Customers
-GROUP BY ContactTitle, ContactName
+SELECT e1.ContactName, e2.ContactName
+FROM Employees e1 INNER JOIN Employees e2 ON e1.ContactTitle = e2.ContactTitle
+WHERE e1.EmployeeID != e2.EmployeeID
 
 --26.Display all the Managers who have more than 2 employees reporting to them.
 SELECT ManagerID, FirstName, LastName
