@@ -151,9 +151,9 @@ GROUP BY o.OrderDate, p.ProductName
 ORDER BY o.OrderDate
 
 --25.Display pairs of employees who have the same job title.
-SELECT e1.FirstName + ‘ ’ + e1.LastName AS "Employee1", e2.FirstName + ‘ ’ + e2.LastName AS "Employee2"
-FROM Employees e1 INNER JOIN Employees e2 ON e1.ContactTitle = e2.ContactTitle
-WHERE e1.EmployeeID != e2.EmployeeID
+SELECT e1.FirstName + ' ' + e1.LastName AS "Employee1", e2.FirstName + ' ' + e2.LastName AS "Employee2"
+FROM Employees e1 INNER JOIN Employees e2 ON e1.Title = e2.Title
+WHERE e1.EmployeeID > e2.EmployeeID
 
 --26.Display all the Managers who have more than 2 employees reporting to them.
 SELECT ManagerID, FirstName, LastName
