@@ -94,13 +94,14 @@ WHERE YEAR(GETDATE()) - YEAR(o.OrderDate) <= 25
 --15.List top 5 locations (Zip Code) where the products sold most.
 SELECT TOP 5 o.ShipPostalCode, SUM(od.Quantity) AS Total
 FROM Orders o INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
+WHERE o.ShipPostalCode IS NOT NULL
 GROUP BY o.ShipPostalCode
 ORDER BY Total DESC
 
 --16.List top 5 locations (Zip Code) where the products sold most in last 25 years.
 SELECT TOP 5 o.ShipPostalCode, SUM(od.Quantity) AS Total
 FROM Orders o INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
-WHERE YEAR(GETDATE()) - YEAR(o.OrderDate) <= 25
+WHERE o.ShipPostalCode IS NOT NULL AND YEAR(GETDATE()) - YEAR(o.OrderDate) <= 25
 GROUP BY o.ShipPostalCode
 ORDER BY Total DESC
 
