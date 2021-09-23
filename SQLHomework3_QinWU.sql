@@ -101,12 +101,11 @@ ORDER BY CNT DESC
 
 SELECT City
 FROM
-(SELECT City, CNT, RANK() OVER (ORDER BY CNT DESC) AS RNK
-FROM
-(SELECT c.City, od.ProductID, SUM(od.Quantity) AS CNT
+(SELECT c.City, od.ProductID, SUM(od.Quantity) AS CNT, RANK() OVER (ORDER BY SUM(od.Quantity) DESC) AS RNK
 FROM Customers c INNER JOIN Orders o ON c.CustomerID = o.CustomerID INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
-GROUP BY c.City, od.ProductID) dt) tmp
+GROUP BY c.City, od.ProductID) dt
 WHERE RNK = 1
+
 
 --11.How do you remove the duplicates record of a table?
 --Ans: 
@@ -127,15 +126,13 @@ FROM Employee
 --13. Find departments that have maximum number of employees.
 --(solution should consider scenario having more than 1 departments that have maximum number of employees).
 --Result should only have - deptname, count of employees sorted by deptname.
-SELECT deptname, Num
-FROM (
-SELECT d2.deptname, dt.Num, RANK() OVER (ORDER BY dt.Num DESC) AS RNK
+SELECT d2.deptname, dt.Num
 FROM
-(SELECT d1.deptid, COUNT(e.empid) AS Num
+(SELECT d1.deptid, COUNT(e.empid) AS Num, RANK() OVER (ORDER BY COUNT(e.empid) DESC) AS RNK
 FROM Dept d1 INNER JOIN Employee e ON d1.deptid = e.deptid
-GROUP BY d.deptid) dt INNER JOIN Dept d2 ON dt.deptid = d2.deptid)
+GROUP BY d.deptid) dt INNER JOIN Dept d2 ON dt.deptid = d2.deptid
 WHERE RNK = 1
-ORDER BY deptname
+ORDER BY d2.deptname
 
 --14. Find top 3 employees (salary based) in every department.
 --Result should have deptname, empid, salary sorted by deptname and then employee with high to low salary.
