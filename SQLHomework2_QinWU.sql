@@ -101,7 +101,7 @@ ORDER BY Total DESC
 --16.List top 5 locations (Zip Code) where the products sold most in last 25 years.
 SELECT TOP 5 c.PostalCode, SUM(od.Quantity) AS Total
 FROM Customers c INNER JOIN Orders o ON c.CustomerID = o.CustomerID INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
-WHERE c.PostalCode IS NOT NULL AND YEAR(o.OrderDate) >= 1996
+WHERE c.PostalCode IS NOT NULL AND YEAR(GETDATE()) - YEAR(o.OrderDate) <= 25
 GROUP BY c.PostalCode
 ORDER BY Total DESC
 
