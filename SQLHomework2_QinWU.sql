@@ -28,8 +28,9 @@ FROM Production.ProductInventory
 --6. Write a query to list the sum of products in the Production.ProductInventory table and LocationID set to 40 and limit the result to include just summarized quantities less than 100.
 SELECT ProductID, SUM(Quantity) AS TheSum
 FROM Production.ProductInventory
-WHERE LocationID = 40 AND Quantity < 100
+WHERE LocationID = 40
 GROUP BY ProductID
+HAVING SUM(Quantity) < 100
 
 --7.Write a query to list the sum of products with the shelf information in the Production.ProductInventory table and LocationID set to 40 and limit the result to include just summarized quantities less than 100
 SELECT Shelf, ProductID, SUM(Quantity) AS TheSum
@@ -79,7 +80,7 @@ GO
 --Query cost: 55%
 SELECT DISTINCT p.ProductName
 FROM Products p INNER JOIN [Order Details] od ON p.ProductID = od.ProductID INNER JOIN Orders o ON od.OrderID = o.OrderID
-WHERE YEAR(o.OrderDate) >= 1996
+WHERE YEAR(GETDATE()) - YEAR(o.OrderDate) <= 25
 
 --Query cost: 45%
 SELECT DISTINCT p.ProductName
@@ -87,7 +88,7 @@ FROM Products p INNER JOIN [Order Details] od ON p.ProductID = od.ProductID
 WHERE od.OrderID IN (
 SELECT o.OrderID
 FROM Orders o
-WHERE YEAR(o.OrderDate) >= 1996
+WHERE YEAR(GETDATE()) - YEAR(o.OrderDate) <= 25
 )
 
 --15.List top 5 locations (Zip Code) where the products sold most.
